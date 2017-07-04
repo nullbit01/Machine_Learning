@@ -53,6 +53,6 @@ sum_squared_error = sum(squared_error)
 
 # Root Mean Squared Error
 
-RMSE = sqrt(sum_squared_error/len(x))
+RMSE = sqrt(sum_squared_error/sum(x))
 
 print(RMSE)
