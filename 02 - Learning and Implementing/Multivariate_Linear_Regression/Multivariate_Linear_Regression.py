@@ -7,7 +7,7 @@ from random import randrange
 from csv import reader
 from math import sqrt
 
-# Load Fike
+# Load File
 
 def load_csv(filename):
     dataset = list()
