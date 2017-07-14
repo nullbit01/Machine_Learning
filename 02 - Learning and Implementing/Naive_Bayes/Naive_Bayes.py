@@ -11,92 +11,92 @@ from math import pi
 # Load file
 
 def load_csv(filename):
-    dataset = list()
-    with open(filename, 'r') as file:
-        csv_reader = reader(file)
-        for row in csv_reader:
-            if not row:
-                continue
-            dataset.append(row)
-    return dataset
+	dataset = list()
+	with open(filename, 'r') as file:
+		csv_reader = reader(file)
+		for row in csv_reader:
+			if not row:
+				continue
+			dataset.append(row)
+	return dataset
 
 # Str to float
 
 def str_to_float(dataset, column):
-    for row in dataset:
-        row[column] = float(row[column].strip())
+	for row in dataset:
+		row[column] = float(row[column].strip())
 
 # Str to int
 
 def str_to_int(dataset, column):
-    class_values = [row[column] for row in dataset]
-    unique = set(class_values)
-    lookup = dict()
-    for i, value in enumerate(unique):
-        lookup[value] = i
-    for row in dataset:
-        row[column] = lookup[row[column]]
-    return lookup
+	class_values = [row[column] for row in dataset]
+	unique = set(class_values)
+	lookup = dict()
+	for i, value in enumerate(unique):
+		lookup[value] = i
+	for row in dataset:
+		row[column] = lookup[row[column]]
+	return lookup
 
 # Split data in k-folds
 
 def cross_validation(dataset, n_folds):
-    dataset_split = list()
-    dataset_copy = list(dataset)
-    fold_size = int(len(dataset) / n_folds)
-    for i in range(n_folds):
-        fold = list()
-        while len(fold) < fold_size:
-            index = randrange(len(dataset_copy))
-            fold.append(dataset_copy.pop(index))
-        dataset_split.append(fold)
-    return dataset_split
+	dataset_split = list()
+	dataset_copy = list(dataset)
+	fold_size = int(len(dataset) / n_folds)
+	for i in range(n_folds):
+		fold = list()
+		while len(fold) < fold_size:
+			index = randrange(len(dataset_copy))
+			fold.append(dataset_copy.pop(index))
+		dataset_split.append(fold)
+	return dataset_split
 
 # Calculate accuracy percentage
 
 def accuracy_metric(actual, predicted):
-    correct = 0
-    for i in range(len(actual)):
-        if actual[i] == predicted[i]:
-            correct += 1
-    return correct / float(len(actual)) * 100.0
+	correct = 0
+	for i in range(len(actual)):
+		if actual[i] == predicted[i]:
+			correct += 1
+	return correct / float(len(actual)) * 100.0
 
 # Evaluate an algorithm using cross-val
 
 def evaluate_algorithm(dataset, algorithm, n_folds, *args):
-    folds = cross_validation(dataset, n_folds)
-    scores = list()
-    for fold in folds:
-        train_set = list(folds)
-        train_set.remove(fold)
-        train_set = sum(train_set, [])
-        test_set = list()
-        for row in fold:
-            row_copy = list(row)
-            test_set.append(row_copy)
-            row_copy[-1] = None
-        predicted = algorithm(train_set, test_set, *args)
-        actual = [row[-1] for row in fold]
-        accuracy = accuracy_metric(actual, predicted)
-        scores.append(accuracy)
-    return scores
+	folds = cross_validation(dataset, n_folds)
+	scores = list()
+	for fold in folds:
+		train_set = list(folds)
+		train_set.remove(fold)
+		train_set = sum(train_set, [])
+		test_set = list()
+		for row in fold:
+			row_copy = list(row)
+			test_set.append(row_copy)
+			row_copy[-1] = None
+		predicted = algorithm(train_set, test_set, *args)
+		actual = [row[-1] for row in fold]
+		accuracy = accuracy_metric(actual, predicted)
+		scores.append(accuracy)
+	return scores
 
 # Split the dataset by class values, return a dict
 
 def separate_by_class(dataset):
-    separated = dict()
-    for i in range(len(dataset)):
-        vector = dataset[i]
-        class_value = vector[-1]
-        if (class_value not in separated):
-            separated[class_value] = list()
-            separated[class_value].append(vector)
-    return separated
+	separated = dict()
+	for i in range(len(dataset)):
+		vector = dataset[i]
+		class_value = vector[-1]
+		if (class_value not in separated):
+			separated[class_value] = list()
+		separated[class_value].append(vector)
+	return separated
 
 # Calculate the mean of a list
 
 def mean(numbers):
-    return sum(numbers) / float(len(numbers))
+	return sum(numbers)/float(len(numbers))
 
 # Calculate standard deviation
 
